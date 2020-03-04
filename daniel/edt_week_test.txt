@@ -1,0 +1,17 @@
+{"week":
+	{"mardi":[{"date":"03/03/2020","subject":"PROJET INFRA","start":"09:00","end":"11:00","professor":"lenoble  fabrice ","room":"B113(Boieldieu)","weekday":"mardi","bts":false,"presence":true},
+			  {"date":"03/03/2020","subject":"TRE RECHERCHE STAGE","start":"11:00","end":"13:00","professor":"bouvier cédric","room":"B113(Boieldieu)","weekday":"mardi","bts":false,"presence":true}],
+     
+	"mercredi":[{"date":"04/03/2020","subject":"COMMUNICATION ORALE","start":"09:00","end":"11:00","professor":"lignieres isabelle","room":"B107BIS(Boieldieu)","weekday":"mercredi","bts":false,"presence":true},
+				{"date":"04/03/2020","subject":"METHODO","start":"11:00","end":"13:00","professor":"lignieres isabelle","room":"B210BIS(Boieldieu)","weekday":"mercredi","bts":false,"presence":true},
+				{"date":"04/03/2020","subject":"PROJET PHYTON","start":"14:00","end":"16:00","professor":"harly alexandre","room":"B201(Boieldieu)","weekday":"mercredi","bts":false,"presence":true},
+				{"date":"04/03/2020","subject":"PHYTON","start":"16:00","end":"18:00","professor":"harly alexandre","room":"B202 (42)(Boieldieu)","weekday":"mercredi","bts":false,"presence":true}],
+	
+	"jeudi":[{"date":"05/03/2020","subject":"SUITES ET SERIES NUM","start":"09:00","end":"11:00","professor":"gomel pierre","room":"B105.(Boieldieu)","weekday":"jeudi","bts":false,"presence":true},
+			 {"date":"05/03/2020","subject":"SUITES ET SERIES NUM","start":"11:00","end":"13:00","professor":"gomel pierre","room":"B113(Boieldieu)","weekday":"jeudi","bts":false,"presence":true},
+			 {"date":"05/03/2020","subject":"PROJET INFRA","start":"14:00","end":"18:00","professor":"lenoble  fabrice ","room":"B307(i30)(Boieldieu)","weekday":"jeudi","bts":false,"presence":true}],
+    
+	"vendredi":[{"date":"06/03/2020","subject":"PROJET MODELISATION","start":"09:00","end":"13:00","professor":"bylykbashi esat","room":"B208BIS(Boieldieu)","weekday":"vendredi","bts":false,"presence":true},
+				{"date":"06/03/2020","subject":"PHYTON","start":"14:00","end":"18:00","professor":"harly alexandre","room":"B201(Boieldieu)","weekday":"vendredi","bts":false,"presence":true}]
+	}
+}
