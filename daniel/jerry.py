@@ -4,62 +4,55 @@ from discord.ext import commands
 import json
 import requests
 import bs4 as BeautifulSoup
-import os
 import time
-
+from tinydb import TinyDB, Query
 
 
 bot = commands.Bot(command_prefix='$')
 guild = 682156076342312960
+db = TinyDB('db.json')
 
 
 
+#============================================
+#                COMMANDES
+#============================================
 
-#@bot.command()
-#async def text(ctx, pseudo, temps, *, reason):
-#    await ctx.send(reason)
-
-#@bot.command()
-#async def ping(ctx):
-#    await ctx.send(':ok_hand:')
-
-
-
-
-@bot.event
-async def on_ready():
-    print('Je suis co !')
+@bot.command()
+async def addnews(ctx, user_link, user_selector):
+        #db.insert({'link': user_link, 'selector': user_selector, 'history': ''})
+        print(user_link + '  ' + user_selector)
+        await ctx.send('Vous venez de vous abonner à ce fil d\'actualité')
 
 
+@bot.command()
+async def ping(ctx):
+    await ctx.send(':ok_hand:')
+
+
+#============================================
+#                FONCTIONS
+#============================================
+
+
+def traitement(lien, mon_selector, history):
+
+    #============================================
+    #           obtention d'un article
+    #============================================
+
+    html = requests.get(lien)
+    context = html.text
+    soup = BeautifulSoup.BeautifulSoup(context, "html.parser")
+
+    for link in soup.find_all(class_=mon_selector, limit=1):
+        last_thread = link.get('href')
 
 
 
-    starttime=time.time()
-    while True:
-
-
-        #================================================
-        #          RECUPERATION DU DERNIER ARTICLE
-        #================================================
-
-                #============================================
-                #           obtention d'un article
-                #============================================
-
-        lien = 'https://www.01net.com/actualites/applis-logiciels/'
-        mon_selector = "table-cell-middle padding-inside-all"
-
-        html = requests.get(lien)
-        context = html.text
-        soup = BeautifulSoup.BeautifulSoup(context, "html.parser")
-
-        for link in soup.find_all(class_=mon_selector, limit=1):
-            last_thread = link.get('href')
-            #print(last_thread)
-
-                #============================================
-                #      filtrage du lien pour avoir www.*
-                #============================================
+        #============================================
+        #      filtrage du lien pour avoir www.*
+        #============================================
 
         good = True
         while good == True:
@@ -69,29 +62,67 @@ async def on_ready():
             else:
                 last_thread = last_thread[1:]
 
-        print(last_thread)
 
-                #============================================
-                #      comparaison avec l'ancien article
-                #============================================
+        #============================================
+        #      comparaison avec l'ancien article
+        #============================================
 
-
-        art_r = open('./article_appli.txt', 'r')
-        content = art_r.read()
-        art_r.close()
-
-        if last_thread != content:
-            art_w = open('./article_appli.txt', 'w')
-            art_w.write(last_thread)
-            art_w.close() 
+        if last_thread != history:
             print('Un article a ajoute')
-            await bot.get_channel(687254822428475412).send('https://'+last_thread)
+            print(last_thread)
+            return last_thread
         else:
-            print('Aucun article recent')
+            #print('Aucun article recent')
+            return "none"
+
+
+
+
+
+
+
+#============================================
+#           A LA CONNEXION DU BOT
+#============================================
+
+
+@bot.event
+async def on_ready():
+    print('Je suis co !')
+
+    time.time()
+    while True:
+
+
+    #================================================
+    #          RECUPERATION DU DERNIER ARTICLE
+    #================================================
+        articles = db.all()
+        for my_article in articles:
+
+            lien = my_article.get('link')
+            mon_selector = my_article.get('selector')
+            history = my_article.get('history')
+
+
+            #============================================
+            #           On envoie en traitement 
+            # -> on recupere un BOOL
+            # si vrai alors on actualise l'historique
+            # puis on envoie le message dans le channel
+            #============================================
+
+            resultat = traitement(lien, mon_selector, history)
+            
+            if resultat != "none":
+                my_article['history'] = resultat
+                db.write_back(articles)
+                await bot.get_channel(687254822428475412).send('https://'+resultat)
+
 
         time.sleep(5 - time.time() % 5)
 
-bot.run('')
+bot.run('Njg0NzYxOTE1NTg2OTA0MDg1.XmzvfA.HW_XJWqgXQI5PdBAJnTRSI81cyg')
 
 
 
