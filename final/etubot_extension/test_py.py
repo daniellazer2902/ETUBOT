@@ -108,14 +108,70 @@ class bot_hugo(commands.Cog):
             await ctx.send("reference modifié")
     
     @commands.command()
-    async def msg(self, ctx, *, message):
-        await ctx.send(message)
+    async def prochain(self, ctx, *cours):
+        date_prochain = ''
+        
+        #on récupere l'ID référent
+        req_search = db_ref.search(Requete.channel == str(ctx.channel.id))
+            
+        print (req_search)
+            
+        ref_lastName = req_search[0]["nom"]
+            
+        ref_firstName = req_search[0]["prenom"]
+            
+        await ctx.send("referent : "+ref_firstName + " " + ref_lastName)
+        
+        url = "https://api-calendar.calendz.app/v1/week/"
+        #on rajoute le mois
+        if my_date.month<10:
+            url +="0"
+        
+        url += str(my_date.month)
+        
+        url += "-"
+        #si on est le week-end on rajoute deux jours pour passer a la semaine suivante
+        if my_date.weekday==5 or my_date.weekday==6:
+            my_date.day = my_date.day+2
+        
+        if my_date.day<10:
+            url +="0"
+        
+        #on rajoute le jour
+        url += str(my_date.day)
+        url +="-20?token=imasecret&firstname=" + ref_firstName + "&lastname=" + ref_lastName
+        
+        requete = requests.get(url)
+        
+        data = requete.content
+        
+        json_data=json.loads(data)
+        
+        print (json_data)
+        
+        while(len(date_prochain) == 0):
+            #my_date = datetime.datetime.now()
+            
+            for days in json_data['week']:
+                for info in days[0]:
+                    if (info == cours):
+                        date_prochain = info['date']
+                    
+        #await ctx.send(date_prochain)
+        
     
     @commands.command()
     async def cours(self, ctx):
         liste = ["PROJET INFRA", "TRE RECHERCHE STAGE", "COMMUNICATION ORALE", "METHODO", "PROJET PHYTON", "PHYTON", "PROJET MODELISATION", "SUITES ET SERIES NUM"]
+        message =  ''
         for cours in liste:
-            await ctx.send(cours)
+            message += cours + "\n"
+        await ctx.send(message)
+    
+    @commands.command()
+    async def msg(self, ctx, *, message):
+        await ctx.send(message)
+    
     
     @commands.command()
     async def edt(self, ctx, jour):
