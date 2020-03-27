@@ -2,78 +2,78 @@ import discord
 from discord.ext import commands
 import datetime
 from datetime import timedelta
+import json
+import requests
 
-#bot = commands.Bot(command_prefix='%')
+bot = commands.Bot(command_prefix='%')
 
-class donnees:
-    def __init__(self, date,start_time,end_time,subject,professor,room):
-        self.date=date
-        self.start_time=start_time
-        self.end_time=end_time
-        self.subject=subject
-        self.professor=professor
-        self.room=room
+@bot.event
+async def on_ready():
+    print('Bot readax')
 
-    def __str__(self):
-        return " \n Aujourd'hui le  " + str(self.date) + " : le cours de " + str(self.start_time) + " heures jusqu'à " + str(self.end_time) + " heures est un cours de " + self.subject + " , administré par " + self.professor + " en salle " + self.room
- 
-class emploi_du_temps:
-    def __init__(self,nom):
-        self.nom=nom
-        self.list=[]
+chn_id =682156076342312960
 
-    def add(self,date,start_time,end_time,subject,professor,room):
-        self.list.append(donnees(date,start_time,end_time,subject,professor,room))
+@bot.command()
+async def edt(ctx,arg=0):
+    await ctx.send("Voici, votre emploi du temps de la journée:", emploi_du_temps_list[0].list[1])
+    
+def recup_message_edt(self, jour, ref_firstName, ref_lastName):
+        liste = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"]
+        my_date = datetime.datetime.now()
+        url = "https://api-calendar.calendz.app/v1/week/"
 
-    def __str__(self):
-        return self.nom 
-
-class bot_olivier(commands.Cog):
-    def __init__(self, bot):
-        self.bot = bot
-
-    @commands.Cog.listener()
-    async def on_ready(self):
-        print('Bot readax')
-
-    @commands.command()
-    async def private_message(ctx,message):   
-        if (message.content.startswith("edt")):
-            member = discord.utils.get(message.guild.members,name=message.content.split(" ")[1])
-            await member.send("semaine 17 mars")
-
-    @commands.command()
-    async def send_edt(ctx, arg= 0):
-        await ctx.send("Voici, votre emploi du temps de la journée:", emploi_du_temps_list[0].list[1])
-
-    if __name__ == "__main__":
-
-        emploi_du_temps_list=[]
+        #on rajoute le mois
+        if my_date.month<10:
+            url +="0"
         
-        emploi_du_temps_list.append(emploi_du_temps("edt 17 mars"))
-        emploi_du_temps_list[0].add("17 mars",9,11,"projet transversal","Epesse Yves Manfred","C212-VP(Chasseur)")
-        emploi_du_temps_list[0].add("17 mars",11,13,"projet transversal","Epesse Yves Manfred","C212-VP(Chasseur)")
-        emploi_du_temps_list[0].add("17 mars",14,16,"HEP inside","Magnan De Bellevue","C211-VP(Chasseur)")
-        emploi_du_temps_list[0].add("17 mars",16,18,"HEP inside","Magnan De Bellevue","C211-VP(Chasseur)")
-         
-        for i in range(0,4):
-            print(emploi_du_temps_list[0].list[i])
+        url += str(my_date.month)
+        
+        url += "-"
+        #si on est le week-end on rajoute deux jours pour passer a la semaine suivante
+        if my_date.weekday==5 or my_date.weekday==6:
+            my_date.day = my_date.day+2
+        
+        if my_date.day<10:
+            url +="0"
+        
+        #on rajoute le jour
+        url += str(my_date.day)
+        url +="-20?token=imasecret&firstname=" + ref_firstName + "&lastname=" + ref_lastName
+        
+        requete = requests.get(url)
+        
+        data =requete.content
+        
+        json_data=json.loads(data)
+        
+        #remplacer le nombre par le jour
+        if jour == 'ojd':
+            jour=liste[int(my_date.weekday())]
+        
+        if jour == 'demain':
+            jour=liste[int(my_date.weekday())+1]
+        
+        
+        message = ""
+        
+        for semaine in json_data['week'][jour]:
+            message += "De "+semaine["start"]+" à "+semaine["end"]+" : \t\t"+semaine["subject"]+" en **"+semaine["room"]+ "**\n"
+        return message
+
+if __name__ == "__main__":
+
+    message = recup_message_edt('','vendredi','olivier','tanguy')
+    print(message)
 
 print("--------------------------------------\n")
 
-datetime_today = datetime.datetime.now()
-print(datetime_today)
+my_date = datetime.datetime.now()
+print(my_date)
 print("--------------------------------------\n")
 
-my_delta = timedelta(minutes= 30)
-new_date = datetime_today - my_delta
-print(new_date)
-
-#if new_date == (hours=8):
-#    print(emploi_du_temps_list[0].list[0]) 
+my_delta = timedelta(hours= 1)
+new_date = my_date - my_delta
+print(new_date)  
 
 
-def setup(bot):
-    bot.add_cog(bot_olivier(bot))
-
-#bot.run('Njg5NzgxNDU2ODk3MzEwODc4.XnjCcw.F8QKNou37q6b-1IbbQsnkUa8GN0')
+bot.run('token')
