@@ -7,26 +7,72 @@ import time
 from tinydb import TinyDB, Query
 
 
-bot = commands.Bot(command_prefix='$')
+#bot = commands.Bot(command_prefix='$')
 guild = 682156076342312960
-db = TinyDB('db_art.json')
+db_art = TinyDB('db_art.json')
 
 
+class bot_daniel(commands.Cog):
+        def __init__(self, bot):
+                self.bot = bot
 
-#============================================
-#                COMMANDES
-#============================================
+        #============================================
+        #                COMMANDES
+        #============================================
 
-@bot.command()
-async def addnews(ctx, user_link, user_selector):
-        #db.insert({'link': user_link, 'selector': user_selector, 'history': ''})
-        print(user_link + '  ' + user_selector)
-        await ctx.send('Vous venez de vous abonner à ce fil d\'actualité')
+        @commands.command()
+        async def addnews(ctx, user_link, user_selector):
+                #db.insert({'link': user_link, 'selector': user_selector, 'history': ''})
+                print(user_link + '  ' + user_selector)
+                await ctx.send('Vous venez de vous abonner à ce fil d\'actualité')
 
 
-@bot.command()
-async def ping(ctx):
-    await ctx.send(':ok_hand:')
+        @commands.command()
+        async def ping(ctx):
+            await ctx.send(':ok_hand:')
+
+
+        #============================================
+        #           A LA CONNEXION DU BOT
+        #============================================
+
+
+        @commands.Cog.listener()
+        async def on_ready(self):
+            print('Je suis co !')
+
+            time.time()
+            #WTF suite impossible
+            while False:
+
+
+            #================================================
+            #          RECUPERATION DU DERNIER ARTICLE
+            #================================================
+                articles = db_art.all()
+                for my_article in articles:
+
+                    lien = my_article.get('link')
+                    mon_selector = my_article.get('selector')
+                    history = my_article.get('history')
+
+
+                    #============================================
+                    #           On envoie en traitement 
+                    # -> on recupere un BOOL
+                    # si vrai alors on actualise l'historique
+                    # puis on envoie le message dans le channel
+                    #============================================
+
+                    resultat = traitement(lien, mon_selector, history)
+                    
+                    if resultat != "none":
+                        my_article['history'] = resultat
+                        db_art.write_back(articles)
+                        await commands.get_channel(687254822428475412).send('https://'+resultat)
+
+
+                time.sleep(5 - time.time() % 5)
 
 
 #============================================
@@ -80,43 +126,8 @@ def traitement(lien, mon_selector, history):
 
 
 
-#============================================
-#           A LA CONNEXION DU BOT
-#============================================
 
+def setup(bot):
+        bot.add_cog(bot_daniel(bot))
 
-@bot.event
-async def on_ready():
-    print('Je suis co !')
-
-    time.time()
-    while True:
-
-
-    #================================================
-    #          RECUPERATION DU DERNIER ARTICLE
-    #================================================
-        articles = db.all()
-        for my_article in articles:
-
-            lien = my_article.get('link')
-            mon_selector = my_article.get('selector')
-            history = my_article.get('history')
-
-
-            #============================================
-            #           On envoie en traitement 
-            # -> on recupere un BOOL
-            # si vrai alors on actualise l'historique
-            # puis on envoie le message dans le channel
-            #============================================
-
-            resultat = traitement(lien, mon_selector, history)
-            
-            if resultat != "none":
-                my_article['history'] = resultat
-                db.write_back(articles)
-                await bot.get_channel(687254822428475412).send('https://'+resultat)
-
-
-        time.sleep(5 - time.time() % 5)
+#bot.run("Njg5NzgxNDU2ODk3MzEwODc4.XnjCcw.F8QKNou37q6b-1IbbQsnkUa8GN0")

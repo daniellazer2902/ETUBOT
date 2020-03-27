@@ -10,10 +10,13 @@ async def load(ctx, extension):
 @bot.command()
 async def unload(ctx, extension):
     bot.unload_extension(f'etubot_extension.{extension}')
+
+if __name__ == "__main__":
     
-for filename in os.listdir('./etubot_extension'):
-    if filename.endswith('.py'):
-        bot.load_extension(f'etubot_extension.{filename[:-3]}')
+    for filename in os.listdir('./etubot_extension'):
+        if filename.endswith('.py'):
+            bot.load_extension(f'etubot_extension.{filename[:-3]}')
 
 
-bot.run("Njg5NzgxNDU2ODk3MzEwODc4.XnH3nw.A1YG4a7xiFYfNeNziSYwf67tHuk")
+#bot.run("Njg5NzgxNDU2ODk3MzEwODc4.XnjCcw.F8QKNou37q6b-1IbbQsnkUa8GN0")
+bot.run("NjgyMjIxNDAxOTE0MzQzNDQ0.Xm9YHQ.PxYpZyCm7-EsQ_sHXGmBqsxjtvA")
