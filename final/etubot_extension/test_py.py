@@ -111,6 +111,11 @@ class bot_hugo(commands.Cog):
     async def msg(self, ctx, *, message):
         await ctx.send(message)
     
+    @commands.command()
+    async def cours(self, ctx):
+        liste = ["PROJET INFRA", "TRE RECHERCHE STAGE", "COMMUNICATION ORALE", "METHODO", "PROJET PHYTON", "PHYTON", "PROJET MODELISATION", "SUITES ET SERIES NUM"]
+        for cours in liste:
+            await ctx.send(cours)
     
     @commands.command()
     async def edt(self, ctx, jour):
