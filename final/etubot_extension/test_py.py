@@ -102,14 +102,14 @@ class bot_hugo(commands.Cog):
         # on verifie si la requete a un résultat ou non
         if len(res_requete) == 0:    
             db_ref.insert({"channel": identifiant, "nom": nom, "prenom": prenom})
-            await bot.get_channel(ctx.channel.id).send("nouvelle reference enregistré")
+            await ctx.send("nouvelle reference enregistré")
         else:
             db_ref.update({"channel": identifiant, "nom": nom, "prenom": prenom}, Requete.channel == identifiant)
-            await bot.get_channel(ctx.channel.id).send("reference modifié")
+            await ctx.send("reference modifié")
     
     @commands.command()
     async def msg(self, ctx, *, message):
-        await bot.get_channel(chn_id).send(message)
+        await ctx.send(message)
     
     
     @commands.command()
@@ -127,21 +127,21 @@ class bot_hugo(commands.Cog):
         
         ref_firstName = req_search[0]["prenom"]
         
-        await bot.get_channel(chn_id).send("referent : "+ref_firstName + " " + ref_lastName)
+        await ctx.send("referent : "+ref_firstName + " " + ref_lastName)
         
         if jour == "semaine":
             for day_liste in liste:
-                await bot.get_channel(chn_id).send(day_liste+" : ")
-                message = recup_message_edt(day_liste, ref_firstName, ref_lastName)
-                await bot.get_channel(chn_id).send(message)
+                await ctx.send(day_liste+" : ")
+                message = recup_message_edt('', day_liste, ref_firstName, ref_lastName)
+                await ctx.send(message)
         else:
-            message = recup_message_edt(jour, ref_firstName, ref_lastName)
-            await bot.get_channel(chn_id).send(message)
+            message = recup_message_edt('', jour, ref_firstName, ref_lastName)
+            await ctx.send(message)
     
     
     @commands.command()
     async def time(self, ctx):
-        await bot.get_channel(chn_id).send(my_date)
+        await ctx.send(my_date)
 
 #puis rajouter ca
 def setup(client):

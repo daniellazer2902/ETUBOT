@@ -28,7 +28,7 @@ class bot_daniel(commands.Cog):
 
 
         @commands.command()
-        async def ping(ctx):
+        async def ping(self, ctx):
             await ctx.send(':ok_hand:')
 
 
@@ -42,7 +42,7 @@ class bot_daniel(commands.Cog):
             print('Je suis co !')
 
             time.time()
-            #WTF suite impossible
+            #putain de boucle infini DANIELLLL !!!
             while False:
 
 
@@ -69,7 +69,7 @@ class bot_daniel(commands.Cog):
                     if resultat != "none":
                         my_article['history'] = resultat
                         db_art.write_back(articles)
-                        await commands.get_channel(687254822428475412).send('https://'+resultat)
+                        await ctx.send('https://'+resultat)
 
 
                 time.sleep(5 - time.time() % 5)

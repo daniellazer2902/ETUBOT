@@ -43,7 +43,7 @@ class bot_marine(commands.Cog):
 
     @commands.command()
     async def devoir(ctx, date, matiere, devoir):
-        await bot.get_channel(684798878649679965).send('```Les devoirs sont : Pour le {} \nEn : {}\nFaire : {}```'.format(date, matiere, devoir))
+        await ctx.send('```Les devoirs sont : Pour le {} \nEn : {}\nFaire : {}```'.format(date, matiere, devoir))
 
 def setup(bot):
     bot.add_cog(bot_marine(bot))

@@ -18,5 +18,5 @@ if __name__ == "__main__":
             bot.load_extension(f'etubot_extension.{filename[:-3]}')
 
 
-#bot.run("Njg5NzgxNDU2ODk3MzEwODc4.XnjCcw.F8QKNou37q6b-1IbbQsnkUa8GN0")
-bot.run("NjgyMjIxNDAxOTE0MzQzNDQ0.Xm9YHQ.PxYpZyCm7-EsQ_sHXGmBqsxjtvA")
+bot.run("Njg5NzgxNDU2ODk3MzEwODc4.Xn2-KQ.vsKgMpvPmleW1sWzqcMn6lQMhhw")
+#bot.run("NjgyMjIxNDAxOTE0MzQzNDQ0.Xm9YHQ.PxYpZyCm7-EsQ_sHXGmBqsxjtvA")
