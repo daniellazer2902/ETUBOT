@@ -153,11 +153,12 @@ class bot_hugo(commands.Cog):
             #my_date = datetime.datetime.now()
             
             for days in json_data['week']:
-                for info in days[0]:
-                    if (info == cours):
-                        date_prochain = info['date']
+                for info in json_data['week'][days][0]:
+                    if (json_data['week'][days][0][info] == cours):
+                        date_prochain = json_data['week'][days][0]['date']
+                        break
                     
-        #await ctx.send(date_prochain)
+        await ctx.send("le prochain cours de" + cours + "aura lieu le " + date_prochain)
         
     
     @commands.command()
