@@ -29,6 +29,9 @@ class bot_daniel(commands.Cog):
             await ctx.send('Vous venez de vous abonner à ce fil d\'actualité')
 
 
+
+
+
         @commands.command()
         async def listnews(self, ctx):
             i = 1
@@ -41,22 +44,58 @@ class bot_daniel(commands.Cog):
             await ctx.send(lien)
 
 
+
+
         @commands.command()
         async def remnews(self, ctx, lien):
             req = Query()
             print(lien)
             db_art.remove(req.link == lien)
             await ctx.send('Vous venez de supprimer l\'article ' + lien)
+
+
+
+
+        @commands.command()
+        async def meteo(self, ctx):
+
+            lien = "http://www.meteo-paris.com/"
+            html = requests.get(lien)
+            context = html.text
+            soup = BeautifulSoup.BeautifulSoup(context, "html.parser")
+            info = soup.select(".ac_bleu .ac_picto_ensemble")
+
+            message = " ```La météo de Daniel du " + str(soup.select("#date_accueil")[1].text) + "\n\n"
+            message += str(soup.select(".ac_com p")[0].text) + "\n\n"
+
+            for my_div in info:
+
+                heure = my_div.select(".ac_etiquette")[0].text
+                temp = my_div.select(".ac_temp")[0].text
+                temp = "".join(temp.split())
+
+                message += str(heure) + " - " + str(temp) + "\n"
+
+
+            message += "\nRisque de pluie - " + soup.select(".pourcent")[0].text
+            message += "```"
+            message = message.replace("Ã©","é").replace("Ã¨","è").replace("Ã","à")
+
+            await ctx.send(message)
+
         #===========================================
         #                   LOOP
-        #==========================================
-
+        #===========================================
 
         @tasks.loop(seconds=5.0)
         async def update(self):
+
+            #===========================================
+            #              LOOP - articles
+            #===========================================
             
             articles = db_art.all()
-            print('test')
+            #print('test')
             #print(discord.utils.get(bot.guild.text_channels, name="news"))
             for my_article in articles:
                 # {'link': user_link, 'selector': user_selector, 'history': ''}
@@ -73,7 +112,7 @@ class bot_daniel(commands.Cog):
                 # puis on envoie le message dans le channel
                 #============================================
 
-                resultat = traitement(lien, mon_selector, history)
+                resultat = traitement_article(lien, mon_selector, history)
                 
                 if resultat != "none":
                     my_article['history'] = resultat
@@ -82,7 +121,7 @@ class bot_daniel(commands.Cog):
 
         #============================================
         #           A LA CONNEXION DU BOT
-        #===========================================
+        #============================================
 
         @update.before_loop
         async def before_update(self):
@@ -99,7 +138,7 @@ class bot_daniel(commands.Cog):
 #============================================
 
 
-def traitement(lien, mon_selector, history):
+def traitement_article(lien, mon_selector, history):
 
     #============================================
     #           obtention d'un article
@@ -142,11 +181,5 @@ def traitement(lien, mon_selector, history):
 
 
 
-
-
-
-
 def setup(bot):
         bot.add_cog(bot_daniel(bot))
-
-#bot.run("Njg5NzgxNDU2ODk3MzEwODc4.XnjCcw.F8QKNou37q6b-1IbbQsnkUa8GN0")
