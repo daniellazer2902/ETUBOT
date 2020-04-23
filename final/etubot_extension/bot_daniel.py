@@ -53,7 +53,9 @@ class bot_daniel(commands.Cog):
             db_art.remove(req.link == lien)
             await ctx.send('Vous venez de supprimer l\'article ' + lien)
 
-
+        #===========================================
+        #                   METEO
+        #===========================================
 
 
         @commands.command()
@@ -83,6 +85,40 @@ class bot_daniel(commands.Cog):
 
             await ctx.send(message)
 
+                
+        @commands.command(pass_context=True, aliases=['dv'])
+        async def defv(self, ctx, mot):
+            lien = "https://www.larousse.fr/dictionnaires/francais/" + mot
+            html = requests.get(lien)
+            context = html.text
+            soup = BeautifulSoup.BeautifulSoup(context, "html.parser")
+
+            try:
+                if soup.select(".Definitions")[0].text:
+
+                    definition = soup.select(".Definitions")[0].text
+                    mot =  soup.select(".AdresseDefinition")[0].text
+                    mot = mot[1:]
+                    author = ctx.message.author
+
+                    embed = discord.Embed(title="Lazer's Dico", description="Les définions les plus sure de ta région", color=0xeee657)
+                    embed.add_field(name="Mot :",value=mot)
+                    embed.add_field(name="Définition :",value=definition)
+                    embed.add_field(name="Par :",value=author)
+                    await ctx.send(embed=embed)
+
+            except IndexError:
+
+                message = "__Vouliez vous plutot chercher __ :\n"
+                for proposition in soup.select(".corrector ul li"):
+                    message += "**°** " + proposition.text + "\n"
+
+                await ctx.send(message)  
+                
+                
+                
+                
+                
         #===========================================
         #                   LOOP
         #===========================================
