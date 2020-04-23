@@ -22,6 +22,7 @@ class bot_daniel(commands.Cog):
         #                COMMANDES
         #============================================
 
+        # permet de rajouter un abonnement et de l'insérer dans la BDD
         @commands.command()
         async def addnews(self, ctx, user_link, user_selector):
             db_art.insert({'link': user_link, 'selector': user_selector, 'history': ''})
@@ -31,12 +32,13 @@ class bot_daniel(commands.Cog):
 
 
 
-
+        # liste tout les abonnements du serveur
         @commands.command()
         async def listnews(self, ctx):
             i = 1
             lien = " ```Liste des articles \n"
             articles = db_art.all()
+
             for my_article in articles:
                 lien += "Articles " + str(i) + " : " + my_article.get('link') + "\n\n"
                 i += 1
@@ -45,7 +47,7 @@ class bot_daniel(commands.Cog):
 
 
 
-
+        # supprime un article de la BDD en prenant son lien
         @commands.command()
         async def remnews(self, ctx, lien):
             req = Query()
@@ -55,7 +57,7 @@ class bot_daniel(commands.Cog):
 
 
 
-
+        # affiche la météo de la journée
         @commands.command()
         async def meteo(self, ctx):
 
@@ -95,8 +97,6 @@ class bot_daniel(commands.Cog):
             #===========================================
             
             articles = db_art.all()
-            #print('test')
-            #print(discord.utils.get(bot.guild.text_channels, name="news"))
             for my_article in articles:
                 # {'link': user_link, 'selector': user_selector, 'history': ''}
 
@@ -133,6 +133,39 @@ class bot_daniel(commands.Cog):
                 print('Bot daniel!')
 
 
+
+
+        @commands.command(pass_context=True, aliases=['dv'])
+        async def defv(self, ctx, mot):
+            lien = "https://www.larousse.fr/dictionnaires/francais/" + mot
+            html = requests.get(lien)
+            context = html.text
+            soup = BeautifulSoup.BeautifulSoup(context, "html.parser")
+
+            try:
+                if soup.select(".Definitions")[0].text:
+
+                    definition = soup.select(".Definitions")[0].text
+                    mot =  soup.select(".AdresseDefinition")[0].text
+                    mot = mot[1:]
+                    author = ctx.message.author
+
+                    embed = discord.Embed(title="Lazer's Dico", description="Les définions les plus sure de ta région", color=0xeee657)
+                    embed.add_field(name="Mot :",value=mot)
+                    embed.add_field(name="Définition :",value=definition)
+                    embed.add_field(name="Par :",value=author)
+                    await ctx.send(embed=embed)
+
+            except IndexError:
+
+                message = "__Vouliez vous plutot chercher __ :\n"
+                for proposition in soup.select(".corrector ul li"):
+                    message += "**°** " + proposition.text + "\n"
+
+                await ctx.send(message)    
+
+
+
 #============================================
 #                FONCTIONS
 #============================================
@@ -150,7 +183,6 @@ def traitement_article(lien, mon_selector, history):
 
     for link in soup.find_all(class_=mon_selector, limit=1):
         last_thread = link.get('href')
-
 
 
         #============================================
@@ -177,6 +209,9 @@ def traitement_article(lien, mon_selector, history):
         else:
             #print('Aucun article recent')
             return "none"
+
+
+
 
 
 

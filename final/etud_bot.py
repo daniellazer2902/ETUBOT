@@ -11,6 +11,11 @@ async def load(ctx, extension):
 async def unload(ctx, extension):
     bot.unload_extension(f'etubot_extension.{extension}')
 
+@bot.command()
+async def reload(ctx, extension):
+    bot.unload_extension(f'etubot_extension.{extension}')
+    bot.load_extension(f'etubot_extension.{extension}')
+
 if __name__ == "__main__":
     
     for filename in os.listdir('./etubot_extension'):
@@ -18,5 +23,5 @@ if __name__ == "__main__":
             bot.load_extension(f'etubot_extension.{filename[:-3]}')
 
 
-bot.run("Njg5NzgxNDU2ODk3MzEwODc4.XoC4KA.z26TVZPK7aKtCDHL8F6c-bbUBK4")
+bot.run("")
 #bot.run("NjgyMjIxNDAxOTE0MzQzNDQ0.Xm9YHQ.PxYpZyCm7-EsQ_sHXGmBqsxjtvA")
