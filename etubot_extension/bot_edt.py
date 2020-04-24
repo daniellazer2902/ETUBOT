@@ -89,7 +89,7 @@ class bot_hugo(commands.Cog):
         print("bot hugo ready!")
     
     #et enfin remplacer bot par commands
-    @commands.command()
+    @commands.command(brief=".id nom prenom id_du_channel")
     async def id(self, ctx, nom, prenom, identifiant):
         #identifiant = str(ctx.channel.id)
         
@@ -108,7 +108,7 @@ class bot_hugo(commands.Cog):
             #await ctx.send("reference modifié")
 
     #affiche la prochaine fois que l'on a un certain cours (ex.:python)
-    @commands.command()
+    @commands.command(brief="affiche le prochain cours (pour recup nom prochain cours -> .cours")
     async def prochain(self, ctx, *cours):
         date_prochain = ''
         
@@ -162,7 +162,7 @@ class bot_hugo(commands.Cog):
         await ctx.send("le prochain cours de" + cours + "aura lieu le " + date_prochain)
         
     
-    @commands.command()
+    @commands.command(brief="affiche une liste de cours")
     async def cours(self, ctx):
         liste = ["PROJET INFRA", "TRE RECHERCHE STAGE", "COMMUNICATION ORALE", "METHODO", "PROJET PHYTON", "PHYTON", "PROJET MODELISATION", "SUITES ET SERIES NUM"]
         message =  ''
@@ -175,7 +175,7 @@ class bot_hugo(commands.Cog):
         await ctx.send(message)
     
     
-    @commands.command()#envoie l'emploi du temps du jour selectionné
+    @commands.command(brief=".edt semaine/ojd/demain/mardi/mercredi/...")#envoie l'emploi du temps du jour selectionné
     async def edt(self, ctx, jour):
         liste = ["mardi", "mercredi", "jeudi", "vendredi"]
         
