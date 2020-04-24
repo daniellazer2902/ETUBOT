@@ -6,7 +6,6 @@ import json
 import requests
 
 client = discord.Client()
-#bot = commands.Bot(command_prefix='%')
 
 #recuperer l'emploi du temps du prochain cours
 def recup_message_edt(jour, ref_firstName, ref_lastName):
@@ -73,21 +72,19 @@ class my_bot (commands.Cog):
     def __init__(self,bot):
         self.bot=bot
 
-# Envoyer l'emploi du temps sur le tchat
-    @commands.command()
+
+    @commands.command("Envoyer l'emploi du temps sur le tchat")
     async def edt(self,ctx):
         message = recup_message_edt("jeudi","olivier","tanguy")
         print(message)
         await ctx.send(message)
 
-# Envoyer l'emploi du temps en DM à l auteur
-    @commands.command()
+    @commands.command("Envoyer l'emploi du temps en DM à l auteur")
     async def mon_edt(self,ctx):
         message = recup_message_edt("jeudi","olivier","tanguy")
         await ctx.author.send(message)    
-
-# Envoyer l'emploi du temps en DM à l ou plusieurs membres     
-    @commands.command()
+     
+    @commands.command("Envoyer l'emploi du temps en DM à l ou plusieurs membres ")
     async def my_edt(self,ctx,message):
             message = recup_message_edt("jeudi","olivier","tanguy")    
             name=message.content.split(" ")[1]
@@ -99,7 +96,6 @@ class my_bot (commands.Cog):
             else:
                 member= discord.utils.get(message.guild.members, name=name)
                 await member.send(message)
-
 
 def setup (bot):
     bot.add_cog(my_bot(bot))
