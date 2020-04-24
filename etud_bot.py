@@ -18,5 +18,5 @@ if __name__ == "__main__":
             bot.load_extension(f'etubot_extension.{filename[:-3]}')
 
 
-bot.run("NjgyMjIxNDAxOTE0MzQzNDQ0.XqC8-A.kWks2__z0-nAQ6peJgbFVd8CzwA")#sprit
-#bot.run("NjgyMjIxNDAxOTE0MzQzNDQ0.Xm9YHQ.PxYpZyCm7-EsQ_sHXGmBqsxjtvA")
+bot.run("")
+#bot.run("")
