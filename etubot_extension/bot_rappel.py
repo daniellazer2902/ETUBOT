@@ -97,5 +97,6 @@ class my_bot (commands.Cog):
                 member= discord.utils.get(message.guild.members, name=name)
                 await member.send(message)
 
+                
 def setup (bot):
     bot.add_cog(my_bot(bot))
