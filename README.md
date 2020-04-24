@@ -25,8 +25,6 @@ permet dd fiare ect
 
 ### bot_devoir.py
 
-### bot_news.py
-
 ### bot_meteo.py
 
 ### bot_rappel.py
