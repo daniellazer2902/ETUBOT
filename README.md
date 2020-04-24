@@ -28,10 +28,18 @@ permet d'afficher les devoirs et de les gérer
 
 ### bot_meteo.py
 
+- .meteo (permet d'afficher lameteo du jour)
+
 ### bot_rappel.py
 
 ### bot_df.py
 
+- .df mot (donne la définition d'un mot) 
+
 ### bot_article.py
+- .listnews (liste tous les articles abonnés)
+- .addnews url ".class1 .class2" (rajoute un article)
+- .remnews url (permet de supprimer un article des suivis)
 
 ### bot_music.py
+permet d'écouter de la musique dans un channel dédié
