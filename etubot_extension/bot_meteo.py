@@ -25,25 +25,38 @@ class bot_meteo(commands.Cog):
         info = soup.select(".ac_bleu .ac_picto_ensemble")
 
         # initialisation du message
-        message = " ```La météo de Daniel du " + str(soup.select("#date_accueil")[1].text) + "\n\n"
-        message += str(soup.select(".ac_com p")[0].text) + "\n\n"
+        embed = discord.Embed(title="ETUBOT", description="Best météo après celle de Gulli <3", color=0xeee657)
+        embed.add_field(name="Date :",value= str(soup.select("#date_accueil")[1].text))
 
+        desc = str(soup.select(".ac_com p")[0].text)
+        desc = desc.replace("Ã©","é").replace("Ã¨","è").replace("Ã","à")
+
+        embed.add_field(name="Descriptif :",value= desc)
+        message = ""
 
         # récupération de chaque moment de la journée et le stock dans message
         for my_div in info:
 
             heure = my_div.select(".ac_etiquette")[0].text
+
+            # traduction de l'utf8
+            heure = heure.replace("Ã©","é").replace("Ã¨","è").replace("Ã","à")
+
+            # suppression des espace lors des temps sinon illisible
             temp = my_div.select(".ac_temp")[0].text
             temp = "".join(temp.split())
 
-            message += str(heure) + " - " + str(temp) + "\n"
+            message += str(heure) + " - " + str(temp) + " °C\n"
 
-        # traduction de l'utf8 + envoie du message 
-        message += "\nRisque de pluie - " + soup.select(".pourcent")[0].text
-        message += "```"
-        message = message.replace("Ã©","é").replace("Ã¨","è").replace("Ã","à")
 
-        await ctx.send(message)
+        embed.add_field(name="Température :" ,value=message)
+
+        #envoie du message
+        await ctx.send(embed=embed)
+
+
+        
+        
 
 def setup(bot):
     bot.add_cog(bot_meteo(bot))
