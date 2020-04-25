@@ -55,7 +55,8 @@ def recup_message_edt(self, jour, ref_firstName, ref_lastName):
         
         if jour == 'demain':
             jour=liste[int(my_date.weekday())+1]
-        
+
+        print (url)
         
         message = ""
         

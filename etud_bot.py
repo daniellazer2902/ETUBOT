@@ -3,15 +3,15 @@ from discord.ext import commands
 
 bot = commands.Bot(command_prefix='.')
 
-@bot.command()
+@bot.command(brief="load extension | charge une extension")
 async def load(ctx, extension):
     bot.load_extension(f'etubot_extension.{extension}')
     
-@bot.command()
+@bot.command(brief="unload extension | décharge une extension")
 async def unload(ctx, extension):
     bot.unload_extension(f'etubot_extension.{extension}')
 
-@bot.command()
+@bot.command(brief="reload extension | recharge une extension")
 async def reload(ctx, extension):
     bot.unload_extension(f'etubot_extension.{extension}')
     bot.load_extension(f'etubot_extension.{extension}')
@@ -24,4 +24,3 @@ if __name__ == "__main__":
 
 
 bot.run("")
-#bot.run("NjgyMjIxNDAxOTE0MzQzNDQ0.Xm9YHQ.PxYpZyCm7-EsQ_sHXGmBqsxjtvA")
