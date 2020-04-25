@@ -7,6 +7,7 @@ import requests
 
 client = discord.Client()
 
+
 #recuperer l'emploi du temps du prochain cours
 def recup_message_edt(jour, ref_firstName, ref_lastName):
     liste = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"]
@@ -67,36 +68,64 @@ def recup_message_edt(jour, ref_firstName, ref_lastName):
             message += "De "+semaine["start"]+" à "+semaine["end"]+" : \t\t"+ semaine["subject"]+" en **" + semaine["room"]+ "**\n"
     return message
 
+
 class my_bot (commands.Cog):
 
     def __init__(self,bot):
         self.bot=bot
 
 
-    @commands.command("Envoyer l'emploi du temps sur le tchat")
+
+    @commands.command(brief="Envoyer l'emploi du temps sur le tchat")
     async def edt(self,ctx):
-        message = recup_message_edt("jeudi","olivier","tanguy")
+        message = recup_message_edt("mercredi","olivier","tanguy")
         print(message)
         await ctx.send(message)
 
-    @commands.command("Envoyer l'emploi du temps en DM à l auteur")
+
+
+    @commands.command(brief="Envoyer l'emploi du temps en DM à l auteur")
     async def mon_edt(self,ctx):
-        message = recup_message_edt("jeudi","olivier","tanguy")
+        message = recup_message_edt("mercredi","olivier","tanguy")
         await ctx.author.send(message)    
      
-    @commands.command("Envoyer l'emploi du temps en DM à l ou plusieurs membres ")
-    async def my_edt(self,ctx,message):
-            message = recup_message_edt("jeudi","olivier","tanguy")    
-            name=message.content.split(" ")[1]
-            
-            if (name == "all"):
-                for member in message.guild.members:
+
+
+    @commands.command(brief="Envoyer l'emploi du temps en DM à l ou plusieurs membres ")
+    async def my_edt(self,ctx,destinataire):
+
+        message = recup_message_edt("mercredi","olivier","tanguy")    
+    
+        # cherche si l'utisateur rentré existe ou non
+        # si oui, lui envoie un mp avec les salles
+        # si non, message erreur
+
+        if destinataire == "all" :
+            print("à tous")
+
+            #for member in ctx.guild.members:
+            #    await member.send(message)
+            await ctx.send(message)
+
+
+        else:
+            verif = True
+            for member in ctx.guild.members:
+
+                if member.display_name == destinataire:
                     await member.send(message)
+                    verif = False
+                    break
 
-            else:
-                member= discord.utils.get(message.guild.members, name=name)
-                await member.send(message)
+                elif member.name == destinataire:
+                    await member.send(message)
+                    verif = False
+                    break
 
-                
+            if verif:
+                await ctx.send(message)
+
+
+
 def setup (bot):
     bot.add_cog(my_bot(bot))
