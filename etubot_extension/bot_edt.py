@@ -1,4 +1,5 @@
 import os
+import discord
 from discord.ext import commands
 import json
 import requests
@@ -21,6 +22,7 @@ db_ref = TinyDB("db_referent.json")
 Requete = Query()
 #db.update({'channel': 682221578393878561}, Requete.name == 'general')
 
+#permet de recupere l'emploi du temps et le retourne dans une phrase structuré
 def recup_message_edt(self, jour, ref_firstName, ref_lastName):
         liste = ["lundi", "mardi", "mercredi", "jeudi", "vendredi", "samedi", "dimanche"]
         
@@ -64,12 +66,6 @@ def recup_message_edt(self, jour, ref_firstName, ref_lastName):
             message += "De "+semaine["start"]+" à "+semaine["end"]+" : \t\t"+semaine["subject"]+" en **"+semaine["room"]+ "**\n"
         return message
 
-def write_file(text, nom, lien):
-    os.chdir(lien)
-    fichier_a = open(nom, "a")
-    fichier_a.write(text)
-    fichier_a.close()
-
 
 #pour faire un cog écrire les trois prochaine lignes
 class bot_hugo(commands.Cog):
@@ -93,7 +89,7 @@ class bot_hugo(commands.Cog):
         print("bot hugo ready!")
     
     #et enfin remplacer bot par commands
-    @commands.command()
+    @commands.command(brief=".id nom prenom id_du_channel")
     async def id(self, ctx, nom, prenom, identifiant):
         #identifiant = str(ctx.channel.id)
         
@@ -106,9 +102,13 @@ class bot_hugo(commands.Cog):
             await ctx.send("nouvelle reference enregistré")
         else:
             db_ref.update({"channel": identifiant, "nom": nom, "prenom": prenom}, Requete.channel == identifiant)
-            await ctx.send("reference modifié")
-    
-    @commands.command()
+            embed = discord.Embed(title="ETUBOT", description="Meilleur BOT de l'EPI", color=0xeee657)
+            embed.add_field(name="cours", value="reference modifié")
+            await ctx.author.send(embed = embed)
+            #await ctx.send("reference modifié")
+
+    #affiche la prochaine fois que l'on a un certain cours (ex.:python)
+    @commands.command(brief="affiche le prochain cours (pour recup nom prochain cours -> .cours")
     async def prochain(self, ctx, *cours):
         date_prochain = ''
         
@@ -162,7 +162,7 @@ class bot_hugo(commands.Cog):
         await ctx.send("le prochain cours de" + cours + "aura lieu le " + date_prochain)
         
     
-    @commands.command()
+    @commands.command(brief="affiche une liste de cours")
     async def cours(self, ctx):
         liste = ["PROJET INFRA", "TRE RECHERCHE STAGE", "COMMUNICATION ORALE", "METHODO", "PROJET PHYTON", "PHYTON", "PROJET MODELISATION", "SUITES ET SERIES NUM"]
         message =  ''
@@ -170,12 +170,12 @@ class bot_hugo(commands.Cog):
             message += cours + "\n"
         await ctx.send(message)
     
-    @commands.command()
+    @commands.command()#renvoie simplement ce que l'utitilisateur a ecrit
     async def msg(self, ctx, *, message):
         await ctx.send(message)
     
     
-    @commands.command()
+    @commands.command(brief=".edt semaine/ojd/demain/mardi/mercredi/...")#envoie l'emploi du temps du jour selectionné
     async def edt(self, ctx, jour):
         liste = ["mardi", "mercredi", "jeudi", "vendredi"]
         
@@ -185,23 +185,28 @@ class bot_hugo(commands.Cog):
         req_search = db_ref.search(Requete.channel == str(ctx.channel.id))
         
         print (req_search)
-        
+        #on récupère le nom et prenom du referent
         ref_lastName = req_search[0]["nom"]
         
         ref_firstName = req_search[0]["prenom"]
         
         await ctx.send("referent : "+ref_firstName + " " + ref_lastName)
-        
+
+        #si l'utilisateur envoi semaine alors on montre toute la semaine
         if jour == "semaine":
             for day_liste in liste:
-                await ctx.send(day_liste+" : ")
                 message = recup_message_edt('', day_liste, ref_firstName, ref_lastName)
-                await ctx.send(message)
+                embed = discord.Embed(title="ETUBOT", description="Meilleur BOT de l'EPI", color=0xeee657)
+                embed.add_field(name= day_liste, value= message)
+                await ctx.author.send(embed = embed)
+        #sinon on montre seulement le jour selectionné
         else:
             message = recup_message_edt('', jour, ref_firstName, ref_lastName)
-            await ctx.send(message)
+            embed = discord.Embed(title="ETUBOT", description="Meilleur BOT de l'EPI", color=0xeee657)
+            embed.add_field(name=jour, value= message)
+            await ctx.author.send(embed = embed)
     
-    
+    #affiche l'heure
     @commands.command()
     async def time(self, ctx):
         await ctx.send(my_date)
