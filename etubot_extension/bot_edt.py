@@ -86,7 +86,7 @@ class bot_hugo(commands.Cog):
     #remplacer .event par .Cog.listener
     @commands.Cog.listener()
     async def on_ready(self):
-        print("bot hugo ready!")
+        print("bot edt ready!")
     
     #et enfin remplacer bot par commands
     @commands.command(brief=".id nom prenom id_du_channel")
