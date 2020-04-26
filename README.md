@@ -29,6 +29,8 @@ permet d'afficher les cours et de les gérer
 ### bot_devoir.py
 
 permet d'afficher les devoirs et de les gérer
+- .enter_dev (ajouter un devoir)
+- .rem_dev (supprimer un devoir)
 
 ### bot_meteo.py
 
