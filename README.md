@@ -29,8 +29,10 @@ permet d'afficher les cours et de les gérer
 ### bot_devoir.py
 
 permet d'afficher les devoirs et de les gérer
-- .enter_dev (ajouter un devoir)
+- .enter_dev date cours message (ajouter un devoir)
 - .rem_dev (supprimer un devoir)
+- .list_dev (affiche tous les devoirs)
+- .search_date date (affiche les devoirs d'un jour precis)
 
 ### bot_meteo.py
 
