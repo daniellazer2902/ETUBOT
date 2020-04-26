@@ -40,7 +40,7 @@ permet d'afficher les devoirs et de les gérer
 
 - .rappel (Envoyer l'emploi du temps sur le tchat)
 - .mon_rappel (Envoyer l'emploi du temps en DM à l auteur)
-_ .mes_rappels (Envoyer l'emploi du temps en DM à l ou plusieurs membres)
+- .mes_rappels (Envoyer l'emploi du temps en DM à l ou plusieurs membres)
 
 ### bot_df.py
 
