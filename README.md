@@ -44,7 +44,7 @@ _ .mes_rappels (Envoyer l'emploi du temps en DM à l ou plusieurs membres)
 
 - .df mot (donne la définition d'un mot) 
 
-#### bot_article.py
+### bot_article.py
 
 - .listnews (liste tous les articles abonnés)
 - .addnews url ".class1 .class2" (rajoute un article)
