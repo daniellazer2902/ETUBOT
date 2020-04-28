@@ -1,5 +1,6 @@
 # ETUBOT
 Projet Dev App EPSI B1 2020
+réalisé par Marine RICO, Olivier TANGUY, Daniel GAVRILINE, Hugo CABARET
 
 ## INTRO
 Etubot est un bot discord destiné a l'organisation et l'information de la vie étudiante
