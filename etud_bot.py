@@ -1,3 +1,5 @@
+#réalisé par Marine RICO, Olivier TANGUY, Daniel GAVRILINE, Hugo CABARET
+
 import os
 from discord.ext import commands
 
