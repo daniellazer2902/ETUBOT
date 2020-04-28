@@ -1,3 +1,5 @@
+#réalisé par Marine RICO, Olivier TANGUY, Daniel GAVRILINE, Hugo CABARET
+
 import discord
 from discord.ext import commands, tasks
 import json
