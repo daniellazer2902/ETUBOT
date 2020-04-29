@@ -11,8 +11,13 @@ pensez avant toutes utilisation a installer les modules suivant (pip install):
 - tinydb
 - discord
 - beautifulsoup4
+- requests
+- discord.py 
+- time
+- datetime
 
 ## utilisation
+Pour avoir accès aux emploi du temps, nous avons eu besoin d'utiliser l'API de Calendz.
 ### etubot
 
 - .load nom_bot (pour charger un bot)
